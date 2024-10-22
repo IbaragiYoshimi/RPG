@@ -26,11 +26,22 @@ public class SkeletonBattleState : EnemyState
 
         if (enemy.IsPlayerDetected())
         {
+            stateTimer = enemy.battleTime;
             if(enemy.IsPlayerDetected().distance < enemy.attackDistance)
             {
                 if(CanAttack())
                     stateMachine.ChangeState(enemy.attackState);
             }
+        }
+        else
+        {
+            /*玩家离开 enemy 的探测范围一段时间后，enemy 离开战斗状态，回到 idleState；
+             * 或者玩家与 enemy 的距离大到一定程度，也会立刻返回 idleState。
+             * 
+             * 
+             */
+            if (stateTimer < 0 || Vector2.Distance(player.transform.position, enemy.transform.position) > 7)
+                stateMachine.ChangeState(enemy.idleState);
         }
 
         // 标记玩家在 Enemy 的 x 轴正方向还是负方向。
