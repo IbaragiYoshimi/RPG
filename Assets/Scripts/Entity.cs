@@ -37,7 +37,7 @@ public class Entity : MonoBehaviour
 
     #region Velocity
     // 快速设置角色速度为(0, 0)
-    public void ZeroVelocity() => rb.velocity = new Vector2(0, 0);
+    public void SetZeroVelocity() => rb.velocity = new Vector2(0, 0);
 
 
     public void SetVelocity(float _xVelocity, float _yVelocity)

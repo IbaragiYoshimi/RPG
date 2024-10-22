@@ -12,6 +12,8 @@ public class Enemy : Entity
 
     [Header("Attack info")]
     public float attackDistance;
+    public float attackCoolDown;        // 敌人的攻击间隔
+    [HideInInspector] public float lastTimeAttacked;      // 敌人最后一次攻击的时间
 
     public EnemyStateMachine stateMachine { get; private set; }
 
@@ -26,6 +28,8 @@ public class Enemy : Entity
         base.Update();
         stateMachine.currentState.Update();
     }
+
+    public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
 
     public virtual RaycastHit2D IsPlayerDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);
 
