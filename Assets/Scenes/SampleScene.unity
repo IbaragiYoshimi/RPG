@@ -383,6 +383,7 @@ GameObject:
   - component: {fileID: 383790860}
   - component: {fileID: 383790863}
   - component: {fileID: 383790862}
+  - component: {fileID: 383790864}
   m_Layer: 7
   m_Name: Enemy_Skeleton
   m_TagString: Untagged
@@ -411,6 +412,8 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  knockbackDirection: {x: 7, y: 5}
+  knockbackDuration: 0.07
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 64
@@ -511,6 +514,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &383790864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383790859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698e8d60f29c4cc4b8aed5da0c7da4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashDuration: 0.2
+  hitMat: {fileID: 2100000, guid: 46bdcb80b8dcf394ca0f2ac4f274a9ab, type: 2}
 --- !u!1 &467227933
 GameObject:
   m_ObjectHideFlags: 3
@@ -1264,6 +1281,7 @@ GameObject:
   - component: {fileID: 1277524024}
   - component: {fileID: 1277524026}
   - component: {fileID: 1277524027}
+  - component: {fileID: 1277524028}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1292,6 +1310,8 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  knockbackDirection: {x: 0, y: 0}
+  knockbackDuration: 0
   attackMovement:
   - {x: 3, y: 1.5}
   - {x: 1, y: 2.5}
@@ -1382,6 +1402,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &1277524028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277524023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698e8d60f29c4cc4b8aed5da0c7da4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashDuration: 0.2
+  hitMat: {fileID: 2100000, guid: 46bdcb80b8dcf394ca0f2ac4f274a9ab, type: 2}
 --- !u!1 &1310355813
 GameObject:
   m_ObjectHideFlags: 0

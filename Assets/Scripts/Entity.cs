@@ -19,7 +19,14 @@ public class Entity : MonoBehaviour
     #region Components
     public Animator anim { get; private set; }
     public Rigidbody2D rb { get; private set; }
+    public EntityFX fx { get; private set; }
     #endregion
+
+    [Header("Knockback info")]
+    [SerializeField] protected Vector2 knockbackDirection;
+    [SerializeField] protected float knockbackDuration;     // 被击退后的硬直时间。
+    protected bool isKnocked;
+
 
     protected virtual void Awake()
     {
@@ -28,6 +35,7 @@ public class Entity : MonoBehaviour
 
     protected virtual void Start()
     {
+        fx = GetComponent<EntityFX>();
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -39,16 +47,40 @@ public class Entity : MonoBehaviour
 
     public virtual void Damage()
     {
+        // 开始协程。
+        fx.StartCoroutine("FlashFX");
+        StartCoroutine("HitKnockback");
         Debug.Log(gameObject.name + " was damaged!");
     }
 
+    protected virtual IEnumerator HitKnockback()
+    {
+        isKnocked = true;
+
+        rb.velocity = new Vector2(knockbackDirection.x * -facingDir, knockbackDirection.y);
+
+        yield return new WaitForSeconds(knockbackDuration);
+
+        isKnocked = false;
+    }
+
+
     #region Velocity
     // 快速设置角色速度为(0, 0)
-    public void SetZeroVelocity() => rb.velocity = new Vector2(0, 0);
+    public void SetZeroVelocity()
+    {
+        if (isKnocked)
+            return;
+        rb.velocity = new Vector2(0, 0);
+    }
 
 
     public void SetVelocity(float _xVelocity, float _yVelocity)
     {
+        // 玩家被击中后，会有硬直时间。
+        if (isKnocked)
+            return;
+
         rb.velocity = new Vector2(_xVelocity, _yVelocity);
         FlipController(_xVelocity);     // 将反转图像的控制器放在这里，避免主 update 循环中杂乱无章。反正 SetVelocity 就是设置速度的，逻辑上说得通。
     }
