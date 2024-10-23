@@ -9,6 +9,8 @@ public class Enemy : Entity
     [Header("Stunned info")]
     public float stunDuration;
     public Vector2 stunDirection;
+    protected bool canBeStunned;
+    [SerializeField] protected GameObject counterImage;
 
     [Header("Move info")]
     public float moveSpeed;
@@ -32,6 +34,33 @@ public class Enemy : Entity
     {
         base.Update();
         stateMachine.currentState.Update();
+    }
+
+    public virtual void OpenCounterAttackWindow()
+    {
+        canBeStunned = true;
+        counterImage.SetActive(true);
+    }
+
+    /*
+     * 攻击起手提示，同时也是反击窗口的提示。需要事先在 Unity Inspector 中把 CounterImage 组件关闭。或者在代码中关闭。
+     * 
+     */
+    public virtual void CloseCounterAttackWindow()
+    {
+        canBeStunned = false;
+        counterImage.SetActive(false);
+    }
+
+    protected virtual bool CanBeStunned()
+    {
+        if (canBeStunned)
+        {
+            CloseCounterAttackWindow();
+            return true;
+        }
+
+        return false;
     }
 
     public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
