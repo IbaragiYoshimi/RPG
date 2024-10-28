@@ -56,7 +56,7 @@ public class Clone_Skill_Controller : MonoBehaviour
         {
             // 如果这些碰撞中有 enemy，则调用 enemy 身上的 Damage 函数，对其血量进行扣减。
             if (hit.GetComponent<Enemy>() != null)
-                hit.GetComponent<Enemy>().Damage();
+                hit.GetComponent<Enemy>().DamageEffect();
         }
     }
 
@@ -70,8 +70,10 @@ public class Clone_Skill_Controller : MonoBehaviour
         {
             if(hit.GetComponent<Enemy>() != null)
             {
+                // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
                 float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
 
+                //遍历所有敌人，每次循环保存距离最近的。
                 if(distanceToEnemy < closestDistance)
                 {
                     closestDistance = distanceToEnemy;
@@ -82,6 +84,7 @@ public class Clone_Skill_Controller : MonoBehaviour
 
         if(closestEnemy != null)
         {
+            // 判断在 x 轴上，克隆体与最近的敌人的位置关系，以此改变克隆体的朝向。
             if (transform.position.x > closestEnemy.position.x)
                 transform.Rotate(0, 180, 0);
         }

@@ -19,7 +19,11 @@ public class PlayerAnimationTriggers : MonoBehaviour
         {
             // 如果这些碰撞中有 enemy，则调用 enemy 身上的 Damage 函数，对其血量进行扣减。
             if (hit.GetComponent<Enemy>() != null)
-                hit.GetComponent<Enemy>().Damage();
+            {
+                EnemyStats _target = hit.GetComponent<EnemyStats>();
+                player.stats.DoDamage(_target);
+            }
+
         }
     }
 }

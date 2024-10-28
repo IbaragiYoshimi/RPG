@@ -380,10 +380,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 383790861}
-  - component: {fileID: 383790860}
   - component: {fileID: 383790863}
   - component: {fileID: 383790862}
+  - component: {fileID: 383790860}
   - component: {fileID: 383790864}
+  - component: {fileID: 383790865}
   m_Layer: 7
   m_Name: Enemy_Skeleton
   m_TagString: Untagged
@@ -532,6 +533,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashDuration: 0.2
   hitMat: {fileID: 2100000, guid: 46bdcb80b8dcf394ca0f2ac4f274a9ab, type: 2}
+--- !u!114 &383790865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383790859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfe7b6dc28483dc40b852d0f4dade500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength:
+    baseValue: 0
+    modifiers: 
+  damage:
+    baseValue: 50
+    modifiers: 
+  maxHealth:
+    baseValue: 100
+    modifiers: 
+  currentHealth: 0
 --- !u!1 &467227933
 GameObject:
   m_ObjectHideFlags: 3
@@ -1474,10 +1497,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1277524025}
-  - component: {fileID: 1277524024}
   - component: {fileID: 1277524026}
   - component: {fileID: 1277524027}
+  - component: {fileID: 1277524024}
   - component: {fileID: 1277524028}
+  - component: {fileID: 1277524029}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1612,6 +1636,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashDuration: 0.2
   hitMat: {fileID: 2100000, guid: 46bdcb80b8dcf394ca0f2ac4f274a9ab, type: 2}
+--- !u!114 &1277524029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277524023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08ba95813b9162e4c9b7def62a4c109f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength:
+    baseValue: 0
+    modifiers: 
+  damage:
+    baseValue: 10
+    modifiers: 
+  maxHealth:
+    baseValue: 100
+    modifiers: 
+  currentHealth: 0
 --- !u!1 &1310355813
 GameObject:
   m_ObjectHideFlags: 0
