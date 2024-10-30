@@ -54,7 +54,6 @@ public class Entity : MonoBehaviour
         // 开始协程。
         fx.StartCoroutine("FlashFX");
         StartCoroutine("HitKnockback");
-        Debug.Log(gameObject.name + " was damaged!");
     }
 
     protected virtual IEnumerator HitKnockback()
