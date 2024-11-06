@@ -16,6 +16,8 @@ public class Entity : MonoBehaviour
     public int facingDir { get; private set; } = 1;         // 注意，facingDir 的初始值一定要设置，不然默认就是 0。会导致冲刺时速度变为 0。
     protected bool facingRight = true;
 
+    public System.Action OnFlipped;
+
     #region Components
     public Animator anim { get; private set; }
     public Rigidbody2D rb { get; private set; }
@@ -108,6 +110,8 @@ public class Entity : MonoBehaviour
         facingRight = !facingRight;
 
         transform.Rotate(0, 180, 0);    // 将图像按 y 轴反转。
+
+        OnFlipped();
     }
 
     /* 
