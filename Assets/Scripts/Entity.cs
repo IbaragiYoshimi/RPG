@@ -111,7 +111,10 @@ public class Entity : MonoBehaviour
 
         transform.Rotate(0, 180, 0);    // 将图像按 y 轴反转。
 
-        OnFlipped();
+        /* 某些不具备血条的人物可能无法找到其挂载的 HealthBar_UI，所以会报错 Object reference not set to an instance
+         * 此时的解决方法比较巧妙：由于每个 Entity 实例的 OnFlipped 都是独立的，只要判断当前这个 Entity 是否有被订阅（委托），就可以知道是否有血条。 */
+        if (OnFlipped != null)
+            OnFlipped();
     }
 
     /* 
