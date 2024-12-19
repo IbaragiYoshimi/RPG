@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
 {
@@ -42,6 +43,12 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            Inventory.instance.RemoveItem(item.data);
+            return;
+        }
+
         if ((item.data.itemType == ItemType.Equipment))
         {
             Inventory.instance.EquipItem(item.data);

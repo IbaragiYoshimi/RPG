@@ -31,12 +31,11 @@ public class CharacterStats : MonoBehaviour
     public bool isChilled;
     public bool isShocked;
 
-
-
-
     public int currentHealth;
 
     public System.Action onHealthChanged;
+    public bool isDead { get; private set; }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -113,7 +112,7 @@ public class CharacterStats : MonoBehaviour
 
     protected virtual void Die()
     {
-
+        isDead = true;
     }
 
     private int CheckTargetArmor(CharacterStats _targetStats, int totalDamage)

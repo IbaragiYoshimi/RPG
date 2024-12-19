@@ -1798,7 +1798,7 @@ MonoBehaviour:
     baseValue: 10
     modifiers: 
   damage:
-    baseValue: 13
+    baseValue: 100
     modifiers: 
   critChance:
     baseValue: 99
@@ -1888,7 +1888,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 42b68c039d9a00645b6839577a844100, type: 2}
   - {fileID: 11400000, guid: 6a9843e9c75aa3b4a81997428437ea9a, type: 2}
   dropPrefab: {fileID: 4384933644650194581, guid: d4e4e03a950ff7a40a4e2823423c46e1, type: 3}
-  item: {fileID: 11400000, guid: 42b68c039d9a00645b6839577a844100, type: 2}
 --- !u!1001 &421117859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2831,6 +2830,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2f2e537cb3554f478b7ff07f407f09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingItems:
+  - {fileID: 11400000, guid: 85ea11dba98036747adf211a3832563d, type: 2}
+  - {fileID: 11400000, guid: dae5ead335084fd46971c6adc507ec88, type: 2}
+  - {fileID: 11400000, guid: 80ad212c5102db544b760a825468006b, type: 2}
+  - {fileID: 11400000, guid: 42b68c039d9a00645b6839577a844100, type: 2}
+  - {fileID: 11400000, guid: 6a9843e9c75aa3b4a81997428437ea9a, type: 2}
   equipment: []
   inventory: []
   stash: []
@@ -5080,6 +5085,7 @@ GameObject:
   - component: {fileID: 1277524024}
   - component: {fileID: 1277524028}
   - component: {fileID: 1277524029}
+  - component: {fileID: 1277524030}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -5273,6 +5279,23 @@ MonoBehaviour:
   isChilled: 0
   isShocked: 0
   currentHealth: 0
+--- !u!114 &1277524030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277524023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd03911f3a1eea439262a8947da57ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleItemDrop: 0
+  possibleDrop: []
+  dropPrefab: {fileID: 4384933644650194581, guid: d4e4e03a950ff7a40a4e2823423c46e1, type: 3}
+  chanceToLooseItems: 75
+  chanceToLooseMaterials: 90
 --- !u!1 &1310355813
 GameObject:
   m_ObjectHideFlags: 0

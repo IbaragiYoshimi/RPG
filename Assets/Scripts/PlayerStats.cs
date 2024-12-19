@@ -25,5 +25,7 @@ public class PlayerStats : CharacterStats
         base.Die();
 
         player.Die();
+
+        GetComponent<PlayerItemDrop>()?.GenerateDrop();
     }
 }
