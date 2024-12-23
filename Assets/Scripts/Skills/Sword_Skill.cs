@@ -1,10 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+public enum SwordType
+{
+    Regular,
+    Bounce,
+    Pierce,
+    Spin
+}
 public class Sword_Skill : Skill
 {
+    public SwordType swordType = SwordType.Regular;
+
+    [Header("Bounce info")]
+    [SerializeField] private int bounceAmount;
+    [SerializeField] private float bounceGravity;
+
+    [Header("Pierce info")]
+    [SerializeField] private int pierceAmount;
+    [SerializeField] private float pierceGravity;
+
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 launchForce;       // 丢剑的初始 x、y 轴速度
@@ -27,6 +42,16 @@ public class Sword_Skill : Skill
 
         // 一进入游戏，就生成 20 个抛物线点，挂载在 player 的 dotParent 下。
         GenerateDots();
+
+        SetupGravity();
+    }
+
+    private void SetupGravity()
+    {
+        if (swordType == SwordType.Bounce)
+            swordGravity = bounceGravity;
+        else if(swordType == SwordType.Pierce)
+            swordGravity = pierceGravity;
     }
 
     protected override void Update()
@@ -38,9 +63,9 @@ public class Sword_Skill : Skill
 
 
         // 当按下鼠标右键时，将抛物线点的索引值，作为时间 t，然后再乘点间距 spaceBetweenDots，作为真正的时间间隔 t，代入 DotsPosition()。
-        if(Input.GetKey(KeyCode.Mouse1))
+        if (Input.GetKey(KeyCode.Mouse1))
         {
-            for(int i = 0; i < dots.Length; i++)
+            for (int i = 0; i < dots.Length; i++)
             {
                 dots[i].transform.position = DotsPosition(i * spaceBetweenDots);
             }
@@ -52,6 +77,11 @@ public class Sword_Skill : Skill
         GameObject newSword = Instantiate(swordPrefab, player.transform.position, transform.rotation);
         Sword_Skill_Controller newSwordScript = newSword.GetComponent<Sword_Skill_Controller>();
 
+        if(swordType == SwordType.Bounce)
+            newSwordScript.SetupBounce(true, bounceAmount);
+        else if(swordType == SwordType.Pierce)
+            newSwordScript.SetupPierce(pierceAmount);
+
         // 将最终施加给剑的力（向量）、重力，赋值给 剑的 rb，其会自动计算每一帧剑应该飞到什么位置。但抛物线点不同，需要我们手动计算。
         newSwordScript.SetupSword(finalDir, swordGravity, player);
 
@@ -61,6 +91,7 @@ public class Sword_Skill : Skill
         DotsActive(false);
     }
 
+    #region Aim region
     public Vector2 AimDirection()
     {
         /* player 的坐标是基于世界坐标。 */
@@ -76,7 +107,7 @@ public class Sword_Skill : Skill
 
     public void DotsActive(bool _isActive)
     {
-        for(int i = 0; i < dots.Length; i++)
+        for (int i = 0; i < dots.Length; i++)
         {
             dots[i].SetActive(_isActive);
         }
@@ -84,7 +115,7 @@ public class Sword_Skill : Skill
     private void GenerateDots()
     {
         dots = new GameObject[numberOfDots];
-        for(int i = 0; i < numberOfDots; i++)
+        for (int i = 0; i < numberOfDots; i++)
         {
             dots[i] = Instantiate(dotPrefab, player.transform.position, Quaternion.identity, dotsParent);       // 进入游戏即生成抛物线点，并存放起来。（对象池）
             dots[i].SetActive(false);                                                                           // 关闭所有抛物线点的显示。
@@ -101,4 +132,5 @@ public class Sword_Skill : Skill
 
         return position;
     }
+    #endregion
 }
