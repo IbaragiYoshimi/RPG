@@ -53,7 +53,9 @@ public class Sword_Skill : Skill
         Sword_Skill_Controller newSwordScript = newSword.GetComponent<Sword_Skill_Controller>();
 
         // 将最终施加给剑的力（向量）、重力，赋值给 剑的 rb，其会自动计算每一帧剑应该飞到什么位置。但抛物线点不同，需要我们手动计算。
-        newSwordScript.SetupSword(finalDir, swordGravity);
+        newSwordScript.SetupSword(finalDir, swordGravity, player);
+
+        player.AssignNewSword(newSword);
 
         // 剑生成后，关闭所有抛物线点。
         DotsActive(false);

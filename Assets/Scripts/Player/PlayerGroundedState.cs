@@ -22,7 +22,8 @@ public class PlayerGroundedState : PlayerState
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        // 注意：举剑瞄准的时候并没有创建剑的实体，仅播放动画，只有松开右键后，才创建剑的实体。所以可以将 HasNoSword 放在 Update 里检测。
+        if (Input.GetKeyDown(KeyCode.Mouse1) && HasNoSword())
             stateMachine.ChangeState(player.aimSword);
 
         if (Input.GetKey(KeyCode.Q))
@@ -37,5 +38,15 @@ public class PlayerGroundedState : PlayerState
 
         if (Input.GetKeyDown(KeyCode.Space) && player.IsGroundDetected())
             stateMachine.ChangeState(player.jumpState);
+    }
+
+    private bool HasNoSword()
+    {
+        if(!player.sword)
+        {
+            return true;
+        }
+        player.sword.GetComponent<Sword_Skill_Controller>().ReturnSword();
+        return false;
     }
 }
