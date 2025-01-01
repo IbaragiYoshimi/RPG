@@ -31,13 +31,14 @@ public class Clone_Skill_Controller : MonoBehaviour
                 Destroy(gameObject);
         }
     }
-    public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset)
+    public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset, Transform _closestEnemy)
     {
         if (_canAttack)
             anim.SetInteger("AttackNumber", Random.Range(1, 3));
         transform.position = _newTransform.position + _offset;
         cloneTimer = _cloneDuration;
 
+        closestEnemy = _closestEnemy;
         FaceClosestTarget();
     }
 
@@ -62,25 +63,25 @@ public class Clone_Skill_Controller : MonoBehaviour
 
     private void FaceClosestTarget()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
+        //Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
 
-        float closestDistance = Mathf.Infinity;
+        //float closestDistance = Mathf.Infinity;
 
-        foreach(var hit in colliders)
-        {
-            if(hit.GetComponent<Enemy>() != null)
-            {
-                // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
-                float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
+        //foreach(var hit in colliders)
+        //{
+        //    if(hit.GetComponent<Enemy>() != null)
+        //    {
+        //        // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
+        //        float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
 
-                //遍历所有敌人，每次循环保存距离最近的。
-                if(distanceToEnemy < closestDistance)
-                {
-                    closestDistance = distanceToEnemy;
-                    closestEnemy = hit.transform;
-                }
-            }
-        }
+        //        //遍历所有敌人，每次循环保存距离最近的。
+        //        if(distanceToEnemy < closestDistance)
+        //        {
+        //            closestDistance = distanceToEnemy;
+        //            closestEnemy = hit.transform;
+        //        }
+        //    }
+        //}
 
         if(closestEnemy != null)
         {
