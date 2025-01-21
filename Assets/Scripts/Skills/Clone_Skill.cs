@@ -17,7 +17,7 @@ public class Clone_Skill : Skill
     [SerializeField] private bool canDuplicateClone;
     [SerializeField] private float chanceToDuplicate;
     [Header("Crystal_Skill instead of clone")]
-    [SerializeField] private bool crystalInsteadOfClone;
+    public bool crystalInsteadOfClone;
 
 
     public void CreateClone(Transform _clonePosition, Vector3 _offset)
@@ -25,6 +25,7 @@ public class Clone_Skill : Skill
         if (crystalInsteadOfClone)
         {
             SkillManager.instance.crystal.CreateCrystal();
+            SkillManager.instance.crystal.CurrentCrystalChooseRandomTarget();
             return;
         }
 
