@@ -12,6 +12,10 @@ public class Clone_Skill_Controller : MonoBehaviour
     [SerializeField] private Transform attackCheck;
     [SerializeField] private float attackCheckRadius = 0.8f;
     private Transform closestEnemy;
+    private int facingDir = 1;
+
+    private bool canDuplicateClone;
+    private float chanceToDuplicate;
 
     private void Awake()
     {
@@ -31,13 +35,15 @@ public class Clone_Skill_Controller : MonoBehaviour
                 Destroy(gameObject);
         }
     }
-    public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset, Transform _closestEnemy)
+    public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset, Transform _closestEnemy, bool _canDuplicate, float _chanceToDuplicate)
     {
         if (_canAttack)
             anim.SetInteger("AttackNumber", Random.Range(1, 3));
         transform.position = _newTransform.position + _offset;
         cloneTimer = _cloneDuration;
 
+        canDuplicateClone = _canDuplicate;
+        chanceToDuplicate = _chanceToDuplicate;
         closestEnemy = _closestEnemy;
         FaceClosestTarget();
     }
@@ -57,37 +63,30 @@ public class Clone_Skill_Controller : MonoBehaviour
         {
             // 如果这些碰撞中有 enemy，则调用 enemy 身上的 Damage 函数，对其血量进行扣减。
             if (hit.GetComponent<Enemy>() != null)
+            {
                 hit.GetComponent<Enemy>().DamageEffect();
+
+                if (canDuplicateClone)
+                {
+                    if (Random.Range(0, 100) < chanceToDuplicate)
+                    {
+                        SkillManager.instance.clone.CreateClone(hit.transform, new Vector3(0.5f * facingDir, 0));
+                    }
+                }
+            }
         }
     }
 
     private void FaceClosestTarget()
     {
-        //Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
-
-        //float closestDistance = Mathf.Infinity;
-
-        //foreach(var hit in colliders)
-        //{
-        //    if(hit.GetComponent<Enemy>() != null)
-        //    {
-        //        // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
-        //        float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
-
-        //        //遍历所有敌人，每次循环保存距离最近的。
-        //        if(distanceToEnemy < closestDistance)
-        //        {
-        //            closestDistance = distanceToEnemy;
-        //            closestEnemy = hit.transform;
-        //        }
-        //    }
-        //}
-
         if(closestEnemy != null)
         {
             // 判断在 x 轴上，克隆体与最近的敌人的位置关系，以此改变克隆体的朝向。
             if (transform.position.x > closestEnemy.position.x)
+            {
+                facingDir = -1;
                 transform.Rotate(0, 180, 0);
+            }
         }
     }
 }

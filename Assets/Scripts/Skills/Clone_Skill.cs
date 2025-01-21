@@ -13,13 +13,24 @@ public class Clone_Skill : Skill
     [SerializeField] private bool createCloneOnDashStart;
     [SerializeField] private bool createCloneOnDashOver;
     [SerializeField] private bool createCloneOnCounterAttack;
+    [Header("Clone cna duplicate")]
+    [SerializeField] private bool canDuplicateClone;
+    [SerializeField] private float chanceToDuplicate;
+    [Header("Crystal_Skill instead of clone")]
+    [SerializeField] private bool crystalInsteadOfClone;
 
 
     public void CreateClone(Transform _clonePosition, Vector3 _offset)
     {
+        if (crystalInsteadOfClone)
+        {
+            SkillManager.instance.crystal.CreateCrystal();
+            return;
+        }
+
         GameObject newClone = Instantiate(clonePrefab);
 
-        newClone.GetComponent<Clone_Skill_Controller>().SetupClone(_clonePosition, cloneDuration, canAttack, _offset, FindClosestEnemy(newClone.transform)); 
+        newClone.GetComponent<Clone_Skill_Controller>().SetupClone(_clonePosition, cloneDuration, canAttack, _offset, FindClosestEnemy(newClone.transform), canDuplicateClone, chanceToDuplicate); 
     }
 
     public void CreateCloneOnDashStart()
