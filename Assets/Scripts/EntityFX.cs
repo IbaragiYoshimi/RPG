@@ -5,10 +5,17 @@ using UnityEngine;
 public class EntityFX : MonoBehaviour
 {
     private SpriteRenderer sr;
+
     [Header("Flash FX")]
     [SerializeField] private float flashDuration;       // 受击闪烁动画持续时间。
     [SerializeField] private Material hitMat;           // 角色受击后替换的材质
     private Material originalMat;      // 角色原始材质
+
+
+    [Header("Ailment colors")]
+    [SerializeField] private Color[] igniteColor;
+    [SerializeField] private Color[] chillColor;
+    [SerializeField] private Color[] shockColor;
 
     private void Start()
     {
@@ -19,10 +26,13 @@ public class EntityFX : MonoBehaviour
     private IEnumerator FlashFX()
     {
         sr.material = hitMat;
+        Color currentColor = sr.color;
+        sr.color = Color.white;
 
         // 使用协程？做到类似于 Sleep 的效果。
         yield return new WaitForSeconds(flashDuration);
 
+        sr.color = currentColor;
         sr.material = originalMat;
     }
 
@@ -34,10 +44,50 @@ public class EntityFX : MonoBehaviour
             sr.color = Color.red;
     }
 
-    private void CancelRedBlink()
+    private void CancelColorChange()
     {
         CancelInvoke();
 
         sr.color = Color.white;
+    }
+
+    public void IgniteFxFor(float _seconds)
+    {
+        InvokeRepeating("IgniteColorFx", 0, 0.3f);
+        Invoke("CancelColorChange", _seconds);
+    }
+    public void ChillFxFor(float _seconds)
+    {
+        InvokeRepeating("ChillColorFx", 0, 0.3f);
+        Invoke("CancelColorChange", _seconds);
+    }
+    public void ShockFxFor(float _seconds)
+    {
+        InvokeRepeating("ShockColorFx", 0, 0.3f);
+        Invoke("CancelColorChange", _seconds);
+    }
+
+    private void IgniteColorFx()
+    {
+        if (sr.color != igniteColor[0])
+            sr.color = igniteColor[0];
+        else
+            sr.color = igniteColor[1];
+    }
+    
+    private void ChillColorFx()
+    {
+        if (sr.color != chillColor[0])
+            sr.color = chillColor[0];
+        else
+            sr.color = chillColor[1];
+    }
+
+    private void ShockColorFx()
+    {
+        if (sr.color != shockColor[0])
+            sr.color = igniteColor[0];
+        else
+            sr.color = igniteColor[1];
     }
 }
