@@ -42,6 +42,9 @@ public class CharacterStats : MonoBehaviour
     private float igniteDamageTimer;
     private int igniteDamage;
 
+    [SerializeField] private GameObject shockStrikePrefab;
+    private int ThunderDamage;
+
     public int currentHealth;
 
     public System.Action onHealthChanged;
@@ -166,11 +169,11 @@ public class CharacterStats : MonoBehaviour
 
     public void ApplyAilments(bool _ignite, bool _chill, bool _shock)
     {
-        // 同一时刻只有一个异常状态
-        if (isIgnited || isChilled || isShocked)
-            return;
+        bool canApplyIgnite = !isIgnited && !isChilled && !isShocked;
+        bool canApplyChill = !isIgnited && !isChilled && !isShocked;
+        bool canApplyShock = !isIgnited && !isChilled;
 
-        if (_ignite)
+        if (_ignite && canApplyIgnite)
         {
             isIgnited = _ignite;
             ignitedTimer = ailmentsDuration;
@@ -178,7 +181,7 @@ public class CharacterStats : MonoBehaviour
             fx.IgniteFxFor(ailmentsDuration);
         }
 
-        if (_chill)
+        if (_chill && canApplyChill)
         {
             isChilled = _chill;
             chilledTimer = ailmentsDuration;
@@ -188,12 +191,52 @@ public class CharacterStats : MonoBehaviour
             fx.ChillFxFor(ailmentsDuration);
         }
 
-        if (_shock)
+        if (_shock && canApplyShock)
         {
-            isShocked = _shock;
-            shockedTimer = ailmentsDuration;
+            if (!isShocked)
+            {
+                isShocked = _shock;
+                shockedTimer = ailmentsDuration;
 
-            fx.ChillFxFor(ailmentsDuration);
+                fx.ChillFxFor(ailmentsDuration);
+
+            }
+            else
+            {
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
+
+                float closestDistance = Mathf.Infinity;
+                Transform closestEnemy = null;
+
+                foreach (var hit in colliders)
+                {
+                    if (hit.GetComponent<Enemy>() != null)
+                    {
+                        // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
+                        float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
+
+                        //遍历所有敌人，每次循环保存距离最近的。
+                        if (distanceToEnemy < closestDistance)
+                        {
+                            closestDistance = distanceToEnemy;
+                            closestEnemy = hit.transform;
+                        }
+                    }
+                }
+
+                if (closestEnemy != null)
+                {
+                    GameObject newThunderStrike = Instantiate(shockStrikePrefab, transform.position, Quaternion.identity);
+
+                    newThunderStrike.GetComponent<ThunderStrike_Controller>().Setup(ThunderDamage, closestEnemy.GetComponent<CharacterStats>());
+                }
+
+                // Find closest target, only among the enemies.
+                // Instantiate thunder strike.
+                // Setup thunder strike.
+
+            }
+
         }
     }
 
