@@ -20,7 +20,7 @@ public class CharacterStats : MonoBehaviour
     public Stat maxHealth;
     public Stat armor;
     public Stat evasion;
-    public Stat magicResistance;        // 魔抗
+    public Stat magicResistance;
 
     [Header("Magic stats")]
     public Stat fireDamage;
@@ -68,9 +68,46 @@ public class CharacterStats : MonoBehaviour
         int _lightningDamage = lightningDamage.GetValue();
 
         int totalMagicalDamage = _fireDamage + _iceDamage + _lightningDamage + intelligence.GetValue();
+        
         totalMagicalDamage = CheckTargetResistance(_targetStats, totalMagicalDamage);
-
         _targetStats.TakeDamage(totalMagicalDamage);
+
+        bool canApplyIgnite = _fireDamage > _iceDamage && _fireDamage > _lightningDamage;
+        bool canApplyChill = _iceDamage > _fireDamage && _iceDamage > _lightningDamage;
+        bool canApplyShock = _lightningDamage > _fireDamage && _lightningDamage > _iceDamage;
+
+        while (!canApplyIgnite && !canApplyChill && !canApplyShock)
+        {
+            if (Mathf.Max(_fireDamage, _iceDamage, _lightningDamage) <= 0)
+                return;
+
+            // The probability of catching fire is higher.
+            if (Random.value < 0.5f && _fireDamage > 0)
+            {
+                canApplyIgnite = true;
+                _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
+                Debug.Log("Applied Ignite!");
+                return;
+            }
+
+            if (Random.value < 0.5f && _iceDamage > 0)
+            {
+                canApplyChill = true;
+                _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
+                Debug.Log("Applied Chill!");
+                return;
+            }
+
+            if (Random.value < 0.5f && _lightningDamage > 0)
+            {
+                canApplyShock = true;
+                _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
+                Debug.Log("Applied Shock!");
+                return;
+            }
+        }
+
+        _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
     }
 
     private static int CheckTargetResistance(CharacterStats _targetStats, int totalMagicalDamage)
@@ -135,10 +172,8 @@ public class CharacterStats : MonoBehaviour
 
     private bool CanCrit()
     {
-        // 总暴击率 = 暴击率 + 敏捷
         int totalCriticalChance = critChance.GetValue() + agility.GetValue();
 
-        // 获取 0 ~ 100 的某个值，若在暴击率内，则可以暴击。由此可见，总暴击率大于 100% 则必爆。
         if(Random.Range(0, 100) <= totalCriticalChance)
         {
             return true;
