@@ -2400,7 +2400,7 @@ Transform:
   m_GameObject: {fileID: 383790859}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 46.77, y: -4.5, z: 0}
+  m_LocalPosition: {x: 56.54, y: -3.31, z: 0}
   m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2511,7 +2511,7 @@ MonoBehaviour:
     baseValue: 5
     modifiers: 
   iceDamage:
-    baseValue: 0
+    baseValue: 10
     modifiers: 
   lightningDamage:
     baseValue: 0
@@ -3299,7 +3299,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.8744354, y: -1.7350187, z: -9.973848}
+  m_LocalPosition: {x: 16.545563, y: -0.5450189, z: -9.973848}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7861,7 +7861,7 @@ Transform:
   m_GameObject: {fileID: 1277524023}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 42.18, y: -4.66, z: 0}
+  m_LocalPosition: {x: 60.6, y: -3.47, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7992,7 +7992,7 @@ MonoBehaviour:
     baseValue: 0
     modifiers: 
   maxHealth:
-    baseValue: 150
+    baseValue: 1000
     modifiers: 
   armor:
     baseValue: 0
@@ -15850,7 +15850,7 @@ Transform:
   m_GameObject: {fileID: 1748467720}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.8744354, y: -1.7350187, z: -9.973848}
+  m_LocalPosition: {x: 16.545563, y: -0.5450189, z: -9.973848}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
