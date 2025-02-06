@@ -86,8 +86,8 @@ public class EntityFX : MonoBehaviour
     private void ShockColorFx()
     {
         if (sr.color != shockColor[0])
-            sr.color = igniteColor[0];
+            sr.color = shockColor[0];
         else
-            sr.color = igniteColor[1];
+            sr.color = shockColor[1];
     }
 }

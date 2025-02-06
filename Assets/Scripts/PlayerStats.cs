@@ -12,11 +12,12 @@ public class PlayerStats : CharacterStats
         player = GetComponent<Player>();
     }
 
-    public override void TakeDamage(int _damage)
+    public override void TakePhysicalDamage(int _damage)
     {
-        base.TakeDamage(_damage);
+        base.TakePhysicalDamage(_damage);
 
         player.DamageEffect();
+        Debug.Log("Player was hitten and invoke hit knock back.");
     }
 
 

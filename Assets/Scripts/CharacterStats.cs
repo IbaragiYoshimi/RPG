@@ -103,7 +103,7 @@ public class CharacterStats : MonoBehaviour
         }
 
         totalDamage = CheckTargetArmor(_targetStats, totalDamage);
-        _targetStats.TakeDamage(totalDamage);
+        _targetStats.TakePhysicalDamage(totalDamage);
         DoMagicalDamage(_targetStats);
     }
 
@@ -116,7 +116,7 @@ public class CharacterStats : MonoBehaviour
         int totalMagicalDamage = _fireDamage + _iceDamage + _lightningDamage + intelligence.GetValue();
         
         totalMagicalDamage = CheckTargetResistance(_targetStats, totalMagicalDamage);
-        _targetStats.TakeDamage(totalMagicalDamage);
+        _targetStats.TakeMagicalDamage(totalMagicalDamage);
 
         bool canApplyIgnite = _fireDamage > _iceDamage && _fireDamage > _lightningDamage;
         bool canApplyChill = _iceDamage > _fireDamage && _iceDamage > _lightningDamage;
@@ -156,6 +156,9 @@ public class CharacterStats : MonoBehaviour
         if(canApplyIgnite)
             _targetStats.SetupIgniteDamage(Mathf.RoundToInt(_fireDamage * 0.2f));
 
+        if (canApplyShock)
+            _targetStats.SetupThunderStrikeDamage(Mathf.RoundToInt(_lightningDamage * 0.1f));
+
         _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
     }
 
@@ -179,6 +182,7 @@ public class CharacterStats : MonoBehaviour
             ignitedTimer = ailmentsDuration;
 
             fx.IgniteFxFor(ailmentsDuration);
+            Debug.Log("Applied Ignite!");
         }
 
         if (_chill && canApplyChill)
@@ -189,64 +193,91 @@ public class CharacterStats : MonoBehaviour
             float slowPercentage = 0.2f;
             GetComponent<Entity>()!.SlowEntityBy(slowPercentage, ailmentsDuration);
             fx.ChillFxFor(ailmentsDuration);
+            Debug.Log("Applied Chill!");
         }
 
         if (_shock && canApplyShock)
         {
             if (!isShocked)
             {
-                isShocked = _shock;
-                shockedTimer = ailmentsDuration;
-
-                fx.ChillFxFor(ailmentsDuration);
-
+                ApplyShock(_shock);
             }
             else
             {
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
-
-                float closestDistance = Mathf.Infinity;
-                Transform closestEnemy = null;
-
-                foreach (var hit in colliders)
-                {
-                    if (hit.GetComponent<Enemy>() != null)
-                    {
-                        // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
-                        float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
-
-                        //遍历所有敌人，每次循环保存距离最近的。
-                        if (distanceToEnemy < closestDistance)
-                        {
-                            closestDistance = distanceToEnemy;
-                            closestEnemy = hit.transform;
-                        }
-                    }
-                }
-
-                if (closestEnemy != null)
-                {
-                    GameObject newThunderStrike = Instantiate(shockStrikePrefab, transform.position, Quaternion.identity);
-
-                    newThunderStrike.GetComponent<ThunderStrike_Controller>().Setup(ThunderDamage, closestEnemy.GetComponent<CharacterStats>());
-                }
-
-                // Find closest target, only among the enemies.
-                // Instantiate thunder strike.
-                // Setup thunder strike.
-
+                if (GetComponent<Player>() != null)
+                    return;
+                HitNearestTargetWithThunderStrike();
             }
 
         }
     }
 
-    public void SetupIgniteDamage(int _damage) => igniteDamage = _damage;
+    public void ApplyShock(bool _shock)
+    {
+        if (isShocked)
+            return;
 
-    public virtual void TakeDamage(int _damage)
+        shockedTimer = ailmentsDuration;
+        isShocked = _shock;
+
+        fx.ShockFxFor(ailmentsDuration);
+        Debug.Log("Applied Shock!");
+    }
+
+    private void HitNearestTargetWithThunderStrike()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
+
+        float closestDistance = Mathf.Infinity;
+        Transform closestEnemy = null;
+
+        foreach (var hit in colliders)
+        {
+            if (hit.GetComponent<Enemy>() != null && hit.gameObject != this.gameObject)
+            {
+                // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
+                float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
+
+                //遍历所有敌人，每次循环保存距离最近的。
+                if (distanceToEnemy < closestDistance)
+                {
+                    closestDistance = distanceToEnemy;
+                    closestEnemy = hit.transform;
+                }
+            }
+
+            if (closestEnemy == null)
+                closestEnemy = transform;
+        }
+
+        if (closestEnemy != null)
+        {
+            GameObject newThunderStrike = Instantiate(shockStrikePrefab, transform.position, Quaternion.identity);
+
+            newThunderStrike.GetComponent<ThunderStrike_Controller>().Setup(ThunderDamage, closestEnemy.GetComponent<CharacterStats>());
+        }
+
+        Debug.Log("Apply thunder!");
+    }
+
+    public void SetupIgniteDamage(int _damage) => igniteDamage = _damage;
+    public void SetupThunderStrikeDamage(int _damage) => ThunderDamage = _damage;
+
+    public virtual void TakePhysicalDamage(int _damage)
     {
         DecreaseHealthBy(_damage);
 
-        Debug.Log("Take Damage " + _damage);
+        Debug.Log("Take Physical Damage " + _damage);
+
+        if (currentHealth <= 0)
+            Die();
+    }
+
+    public virtual void TakeMagicalDamage(int _damage)
+    {
+        DecreaseHealthBy(_damage);
+
+        Debug.Log("Take Magical Damage " + _damage);
 
         if (currentHealth <= 0)
             Die();

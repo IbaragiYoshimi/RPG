@@ -55,9 +55,9 @@ public class EnemyStats : CharacterStats
         }
     }
 
-    public override void TakeDamage(int _damage)
+    public override void TakePhysicalDamage(int _damage)
     {
-        base.TakeDamage(_damage);
+        base.TakePhysicalDamage(_damage);
 
         enemy.DamageEffect();
     }
