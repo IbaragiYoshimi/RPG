@@ -64,7 +64,8 @@ public class Clone_Skill_Controller : MonoBehaviour
             // 如果这些碰撞中有 enemy，则调用 enemy 身上的 Damage 函数，对其血量进行扣减。
             if (hit.GetComponent<Enemy>() != null)
             {
-                //hit.GetComponent<Enemy>().DamageEffect();
+                PlayerManager.instance.player.stats.DoDamage(hit.GetComponent<CharacterStats>());
+                hit.GetComponent<Enemy>().DamageImpact();
 
                 if (canDuplicateClone)
                 {

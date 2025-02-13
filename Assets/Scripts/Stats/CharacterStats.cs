@@ -68,7 +68,7 @@ public class CharacterStats : MonoBehaviour
 
         igniteDamageTimer -= Time.deltaTime;
 
-        if(isIgnited && ignitedTimer < 0)
+        if (isIgnited && ignitedTimer < 0)
             isIgnited = false;
 
         if (isChilled && chilledTimer < 0)
@@ -76,19 +76,12 @@ public class CharacterStats : MonoBehaviour
 
         if (isShocked && shockedTimer < 0)
             isShocked = false;
-
-        if (igniteDamageTimer < 0 && isIgnited)
-        {
-            Debug.Log("Take ignite damage " + igniteDamage);
-
-            currentHealth -= igniteDamage;
-
-            if (currentHealth <= 0)
-                Die();
-
-            igniteDamageTimer = igniteDamageCooldown;
-        }
+        
+        if (isIgnited)
+            ApplyIgniteDamage();
     }
+
+    
 
     public virtual void DoDamage(CharacterStats _targetStats)
     {
@@ -107,6 +100,7 @@ public class CharacterStats : MonoBehaviour
         DoMagicalDamage(_targetStats);
     }
 
+    #region Magical damage and ailments
     public virtual void DoMagicalDamage(CharacterStats _targetStats)
     {
         int _fireDamage = fireDamage.GetValue();
@@ -114,19 +108,24 @@ public class CharacterStats : MonoBehaviour
         int _lightningDamage = lightningDamage.GetValue();
 
         int totalMagicalDamage = _fireDamage + _iceDamage + _lightningDamage + intelligence.GetValue();
-        
+
         totalMagicalDamage = CheckTargetResistance(_targetStats, totalMagicalDamage);
         _targetStats.TakeMagicalDamage(totalMagicalDamage);
 
+        if (Mathf.Max(_fireDamage, _iceDamage, _lightningDamage) <= 0)
+            return;
+
+        AttemptToApplyAilments(_targetStats, _fireDamage, _iceDamage, _lightningDamage);
+    }
+
+    private static void AttemptToApplyAilments(CharacterStats _targetStats, int _fireDamage, int _iceDamage, int _lightningDamage)
+    {
         bool canApplyIgnite = _fireDamage > _iceDamage && _fireDamage > _lightningDamage;
         bool canApplyChill = _iceDamage > _fireDamage && _iceDamage > _lightningDamage;
         bool canApplyShock = _lightningDamage > _fireDamage && _lightningDamage > _iceDamage;
 
         while (!canApplyIgnite && !canApplyChill && !canApplyShock)
         {
-            if (Mathf.Max(_fireDamage, _iceDamage, _lightningDamage) <= 0)
-                return;
-
             // The probability of catching fire is higher.
             if (Random.value < 0.5f && _fireDamage > 0)
             {
@@ -153,7 +152,7 @@ public class CharacterStats : MonoBehaviour
             }
         }
 
-        if(canApplyIgnite)
+        if (canApplyIgnite)
             _targetStats.SetupIgniteDamage(Mathf.RoundToInt(_fireDamage * 0.2f));
 
         if (canApplyShock)
@@ -162,13 +161,7 @@ public class CharacterStats : MonoBehaviour
         _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
     }
 
-
-    private static int CheckTargetResistance(CharacterStats _targetStats, int totalMagicalDamage)
-    {
-        totalMagicalDamage -= _targetStats.magicResistance.GetValue() + (_targetStats.intelligence.GetValue() * 3);
-        totalMagicalDamage = Mathf.Clamp(totalMagicalDamage, 0, int.MaxValue);
-        return totalMagicalDamage;
-    }
+    
 
     public void ApplyAilments(bool _ignite, bool _chill, bool _shock)
     {
@@ -235,10 +228,9 @@ public class CharacterStats : MonoBehaviour
         {
             if (hit.GetComponent<Enemy>() != null && hit.gameObject != this.gameObject)
             {
-                // 主角的克隆体需要探测半径25个单位内与所有敌人的碰撞，然后找出最近的敌人。
+                // Player's clone should detect all colliders in radius = 25 unit. And find the closest one.
                 float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
 
-                //遍历所有敌人，每次循环保存距离最近的。
                 if (distanceToEnemy < closestDistance)
                 {
                     closestDistance = distanceToEnemy;
@@ -259,17 +251,36 @@ public class CharacterStats : MonoBehaviour
 
         Debug.Log("Apply thunder!");
     }
+    private void ApplyIgniteDamage()
+    {
+        if (igniteDamageTimer < 0)
+        {
+            Debug.Log("Take ignite damage " + igniteDamage);
 
+            currentHealth -= igniteDamage;
+
+            if (currentHealth <= 0 && !isDead)
+                Die();
+
+            igniteDamageTimer = igniteDamageCooldown;
+        }
+    }
     public void SetupIgniteDamage(int _damage) => igniteDamage = _damage;
     public void SetupThunderStrikeDamage(int _damage) => ThunderDamage = _damage;
+
+    #endregion
 
     public virtual void TakePhysicalDamage(int _damage)
     {
         DecreaseHealthBy(_damage);
 
+        GetComponent<Entity>().DamageImpact();
+        fx.StartCoroutine("FlashFX");
+
+
         Debug.Log("Take Physical Damage " + _damage);
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isDead)
             Die();
     }
 
@@ -279,7 +290,7 @@ public class CharacterStats : MonoBehaviour
 
         Debug.Log("Take Magical Damage " + _damage);
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isDead)
             Die();
     }
 
@@ -292,6 +303,7 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    #region Stat calculations
     protected virtual void Die()
     {
         isDead = true;
@@ -306,6 +318,13 @@ public class CharacterStats : MonoBehaviour
 
         totalDamage = Mathf.Clamp(totalDamage, 0, int.MaxValue);
         return totalDamage;
+    }
+
+    private int CheckTargetResistance(CharacterStats _targetStats, int totalMagicalDamage)
+    {
+        totalMagicalDamage -= _targetStats.magicResistance.GetValue() + (_targetStats.intelligence.GetValue() * 3);
+        totalMagicalDamage = Mathf.Clamp(totalMagicalDamage, 0, int.MaxValue);
+        return totalMagicalDamage;
     }
     private bool TargetCanAvoidAttack(CharacterStats _targetStats)
     {
@@ -346,4 +365,6 @@ public class CharacterStats : MonoBehaviour
     {
         return maxHealth.GetValue() + vitality.GetValue() * 5;
     }
+    
+    #endregion 
 }

@@ -5,15 +5,15 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     [Header("Collision info")]
-    public Transform attackCheck;           // 攻击范围框。
-    public float attackCheckRadius;         // 攻击检查半径。
+    public Transform attackCheck;
+    public float attackCheckRadius;
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected float wallCheckDistance;
-    [SerializeField] protected LayerMask whatIsGround;        // 碰撞检测时需要知道哪些层算“碰上了”。
+    [SerializeField] protected LayerMask whatIsGround;
 
-    public int facingDir { get; private set; } = 1;         // 注意，facingDir 的初始值一定要设置，不然默认就是 0。会导致冲刺时速度变为 0。
+    public int facingDir { get; private set; } = 1;
     protected bool facingRight = true;
 
     public System.Action OnFlipped;
@@ -29,7 +29,7 @@ public class Entity : MonoBehaviour
 
     [Header("Knockback info")]
     [SerializeField] protected Vector2 knockbackDirection;
-    [SerializeField] protected float knockbackDuration;     // 被击退后的硬直时间。
+    [SerializeField] protected float knockbackDuration;
     protected bool isKnocked;
 
 
@@ -63,12 +63,7 @@ public class Entity : MonoBehaviour
         anim.speed = 1;
     }
 
-    public virtual void DamageEffect()
-    {
-        // 开始协程。
-        fx.StartCoroutine("FlashFX");
-        StartCoroutine("HitKnockback");
-    }
+    public virtual void DamageImpact() => StartCoroutine("HitKnockback");
 
     protected virtual IEnumerator HitKnockback()
     {
@@ -83,7 +78,6 @@ public class Entity : MonoBehaviour
 
 
     #region Velocity
-    // 快速设置角色速度为(0, 0)
     public void SetZeroVelocity()
     {
         if (isKnocked)
@@ -94,17 +88,16 @@ public class Entity : MonoBehaviour
 
     public void SetVelocity(float _xVelocity, float _yVelocity)
     {
-        // 玩家被击中后，会有硬直时间。
         if (isKnocked)
             return;
 
         rb.velocity = new Vector2(_xVelocity, _yVelocity);
-        FlipController(_xVelocity);     // 将反转图像的控制器放在这里，避免主 update 循环中杂乱无章。反正 SetVelocity 就是设置速度的，逻辑上说得通。
+        FlipController(_xVelocity);
     }
     #endregion
 
     #region Collision
-    public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);     // 射线起点，射线方向，射线长度，射线终点标志。
+    public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
     public virtual bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, whatIsGround);
 
     protected virtual void OnDrawGizmos()
@@ -118,20 +111,15 @@ public class Entity : MonoBehaviour
     #region Flip
     public virtual void Flip()
     {
-        facingDir = facingDir * -1;     // 将这两个标志位反转。
+        facingDir = facingDir * -1;
         facingRight = !facingRight;
 
-        transform.Rotate(0, 180, 0);    // 将图像按 y 轴反转。
+        transform.Rotate(0, 180, 0);
 
-        /* 某些不具备血条的人物可能无法找到其挂载的 HealthBar_UI，所以会报错 Object reference not set to an instance
-         * 此时的解决方法比较巧妙：由于每个 Entity 实例的 OnFlipped 都是独立的，只要判断当前这个 Entity 是否有被订阅（委托），就可以知道是否有血条。 */
         if (OnFlipped != null)
             OnFlipped();
     }
 
-    /* 
-     * 这个没搞懂，为什么需要 FlipController 来控制图像反转呢，岂不是多此一举。
-     */
     public virtual void FlipController(float _x)
     {
         if (_x > 0 && !facingRight)
@@ -141,13 +129,7 @@ public class Entity : MonoBehaviour
     }
     #endregion
 
-    public void MakeTransprent(bool _transprent)
-    {
-        if (_transprent)
-            sr.color = Color.clear;
-        else
-            sr.color = Color.white;
-    }
+    
 
     public virtual void Die()
     {

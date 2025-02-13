@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManager instance;       // 单例模式，提升运行效率，别的脚本要寻找 player 不需要使用 GameObject.Find 了。
+    public static PlayerManager instance;       // Singleton instead of GameObject.Find()
     public Player player;
 
     private void Awake()
