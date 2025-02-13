@@ -11,11 +11,11 @@ public class Inventory : MonoBehaviour
     public List<InventoryItem> equipment;
     public Dictionary<ItemData_Equipment, InventoryItem> equipmentDictionary;
 
-    public List<InventoryItem> inventory;      // 用于存放
-    public Dictionary<ItemData, InventoryItem> inventoryDictionary;     // 用于快速查找
+    public List<InventoryItem> inventory;
+    public Dictionary<ItemData, InventoryItem> inventoryDictionary;
 
-    public List<InventoryItem> stash;      // 用于存放
-    public Dictionary<ItemData, InventoryItem> stashDictionary;     // 用于快速查找
+    public List<InventoryItem> stash;
+    public Dictionary<ItemData, InventoryItem> stashDictionary;
 
     [Header("Inventory UI")]
 
@@ -163,18 +163,15 @@ public class Inventory : MonoBehaviour
 
     private void AddToInventory(ItemData _item)
     {
-        // 通过物品信息查找对应物品，而物品数量由每个物品的实例自己维护，同一种物品只需存在一个实例。数量是其内部的值。
+        // item number was maintained by item itself.
         if (inventoryDictionary.TryGetValue(_item, out InventoryItem value))
         {
             value.AddStack();
         }
         else
         {
-            // 如果没有，则通过物品信息实例化一种新的物品，然后存放之。
             InventoryItem newItem = new InventoryItem(_item);
-            // 物品列表中存放实例。
             inventory.Add(newItem);
-            // 字典中存放指向该物品的指针，通过键值对可以快速查找其所在位置。
             inventoryDictionary.Add(_item, newItem);
         }
     }
@@ -183,26 +180,22 @@ public class Inventory : MonoBehaviour
     {
         if(inventoryDictionary.TryGetValue(_item, out InventoryItem value))
         {
-            // 当该物品仅有一个时，调用本方法直接将 List 中的实例移除。同时移除字典存放的指针。
             if(value.stackSize <= 1)
             {
                 inventory.Remove(value);
                 inventoryDictionary.Remove(_item);
             }
-            // 否则，仅调用该物品实例，移除一个数量。
             else
                 value.RemoveStack();
         }
 
         if (stashDictionary.TryGetValue(_item, out InventoryItem stashValue))
         {
-            // 当该物品仅有一个时，调用本方法直接将 List 中的实例移除。同时移除字典存放的指针。
             if (stashValue.stackSize <= 1)
             {
                 stash.Remove(stashValue);
                 stashDictionary.Remove(_item);
             }
-            // 否则，仅调用该物品实例，移除一个数量。
             else
                 stashValue.RemoveStack();
         }
