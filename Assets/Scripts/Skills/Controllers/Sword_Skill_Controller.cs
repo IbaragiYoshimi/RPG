@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Sword_Skill_Controller : MonoBehaviour
@@ -31,7 +28,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     private float maxTravelDistance;
     private float spinDuration;
     private float spinTimer;
-    private bool wasStopped;        // 注意，wasStopped 与 isSpinning 并不是相反的关系，剑丢出去之后移动到最大距离，停下来后才开始旋转。
+    private bool wasStopped;        // Attention! wasStopped is different from isSpinning, player throws sword and it comes to max distance, then it start spinning.
     private bool isSpinning;
 
     private float hitTimer;
@@ -39,13 +36,13 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     private float spinDirection;
 
-    /* 由于未知原因，丢剑时，SetupSword 比 Start 更早执行，导致 rb 无引用。
-     * 需要将 rb 等获取组件的语句提前到 Awake 中。*/
+    /* Because of unknown reason, when player throws sword, SetupSword() calls earlier then Start() and leads to rb has no reference.
+     * To Solve the problem, get rigidbody and other components should be called in Awake() */
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        cd = GetComponent<CircleCollider2D>(); 
+        cd = GetComponent<CircleCollider2D>();
     }
 
     private void DestroyMe()
@@ -55,11 +52,11 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     public void SetupSword(Vector2 _dir, float _gravityScale, Player _player, float _freezeTimeDuration, float _returnSpeed)
-    {   
+    {
         player = _player;
         freezeTimeDuration = _freezeTimeDuration;
         returnSpeed = _returnSpeed;
@@ -67,7 +64,7 @@ public class Sword_Skill_Controller : MonoBehaviour
         rb.velocity = _dir;
         rb.gravityScale = _gravityScale;
 
-        if(pierceAmount <= 0)
+        if (pierceAmount <= 0)
             anim.SetBool("Rotation", true);
 
         spinDirection = Mathf.Clamp(rb.velocity.x, -1, 1);
@@ -81,7 +78,7 @@ public class Sword_Skill_Controller : MonoBehaviour
         bounceAmount = _amountOfBounces;
         bounceSpeed = _bounceSpeed;
 
-        // 将enemyTarget 设置为 private 的话，Unity 不会自动创建，需手动；反之，public 则会自动创建。
+        // Attention! If a list's access modifier is private, Unity won't create it automatically.
         enemyTarget = new List<Transform>();
     }
 
@@ -109,7 +106,7 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     private void Update()
     {
-        // 虽然丢剑出去的时候用的是旋转的动画，但实际上也用刚体的速度向量，赋值给剑在世界坐标中的红箭头，这样剑本体就能跟着旋转了（前提是事先调整 prefab，让剑的方向要与红箭头方向一致）。
+        // Make the sword parallel to the red arrow in the world coorinates of the rigid body.
         if (canRotate)
             transform.right = rb.velocity;
 
@@ -177,7 +174,6 @@ public class Sword_Skill_Controller : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, enemyTarget[targetIndex].position, bounceSpeed * Time.deltaTime);
 
-            // Update 函数本身也是循环调用的，每一帧调用一次，所以只需要考虑每一帧探测一次剑周围的目标，看看是否小于特定的距离，下一帧该剑就会弹射到该目标上。
             if (Vector2.Distance(transform.position, enemyTarget[targetIndex].position) < 0.1f)
             {
                 SwordSkillDamage(enemyTarget[targetIndex].GetComponent<Enemy>());
@@ -199,11 +195,11 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 剑在返回途中暂时不会对敌人产生任何反应。
+        // It will do nothing when sword is returnning.
         if (isReturning)
             return;
 
-        if(collision.GetComponent<Enemy>() != null)
+        if (collision.GetComponent<Enemy>() != null)
         {
             Enemy enemy = collision.GetComponent<Enemy>();
             SwordSkillDamage(enemy);
@@ -219,6 +215,11 @@ public class Sword_Skill_Controller : MonoBehaviour
         PlayerManager.instance.player.stats.DoDamage(enemy.GetComponent<CharacterStats>());
         enemy.DamageImpact();
         enemy.StartCoroutine("FreezeTimerFor", freezeTimeDuration);
+
+        ItemData_Equipment equipedAmulet = Inventory.instance.GetEquipment(EquipmentType.Amulet);
+        
+        if (equipedAmulet != null)
+            equipedAmulet.Effect(enemy.transform);
     }
 
     private void SetupTargetsForBounce(Collider2D collision)

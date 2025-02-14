@@ -294,7 +294,12 @@ public class CharacterStats : MonoBehaviour
             Die();
     }
 
-    protected virtual void DecreaseHealthBy(int _damage)
+    public virtual void IncreaseHealthBy(int _amount)
+    {
+        currentHealth += _amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, GetMaxhealthValue());
+    }
+    public virtual void DecreaseHealthBy(int _damage)
     {
         currentHealth -= _damage;
         if(onHealthChanged != null)

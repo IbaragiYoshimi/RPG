@@ -253,4 +253,12 @@ public class Inventory : MonoBehaviour
         return equipedItem;
     }
 
+    public void UseFlask()
+    {
+        ItemData_Equipment currentFlask = GetEquipment(EquipmentType.Flask);
+
+        if (currentFlask != null)
+            Debug.Log("Used flask and healed!");
+    }
+
 }

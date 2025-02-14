@@ -23,7 +23,7 @@ public class Crystal_Skill : Skill
     [SerializeField] private bool canUseMultiStacks;
     [SerializeField] private int amountOfStacks;
     [SerializeField] private float multiStackCooldown;
-    [SerializeField] private float useTimeWindow;               // 一旦使用水晶连击，必须在时间窗口内使用，如果过了窗口期，就算还有剩余水晶，也强制进入技能冷却状态。
+    [SerializeField] private float useTimeWindow;               // Once you use the skill, you must use it in fixed time, and then forced skill into cooldown.
     [SerializeField] private List<GameObject> crystalLeft = new List<GameObject>();
     public override void UseSkill()
     {
@@ -75,12 +75,12 @@ public class Crystal_Skill : Skill
         {
             if(crystalLeft.Count > 0)
             {
-                // 巧妙应用 Invoke 的延时执行特性，在输出窗口 useTimeWindow 结束之后强制进入冷却。
+                // The function Invoke can delay, when you outside of useTimeWindow then it forces the skill into cooldown.
                 if (crystalLeft.Count == amountOfStacks)
                     Invoke("ResetAbility", useTimeWindow);
 
                 cooldown = 0;
-                // 可以理解为：从 List 中获取 crystalToSpawn 的指针。然后将该指针从 List 中删除。
+                
                 GameObject crystalToSpawn = crystalLeft[crystalLeft.Count - 1];
                 GameObject newCrystal = Instantiate(crystalToSpawn, player.transform.position, Quaternion.identity);
 
@@ -101,7 +101,7 @@ public class Crystal_Skill : Skill
         return false;
     }
 
-    // 重新装填水晶（子弹）
+    // Reload bullet
     private void RefilCrystal()
     {
         int amountToAdd = amountOfStacks - crystalLeft.Count;
