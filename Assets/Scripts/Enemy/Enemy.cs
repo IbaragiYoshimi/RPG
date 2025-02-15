@@ -72,7 +72,11 @@ public class Enemy : Entity
         }
     }
 
-    protected virtual IEnumerator FreezeTimerFor(float _seconds)
+    public virtual void FreezeTimerFor(float _duration) => StartCoroutine(FreezeTimerCoroutine(_duration));
+
+    // Why does FreezeTimerFor() implemented by yield? In order to do not block process.
+    // And why does FreezeTimerFor() be declared as IEnumerator? Because Unity Coroutine requires return IEnumerator for implementation. IEnumerator defines Iterators such as Current(), MoveNext(), etc. And Unity use them to control coroutine's workflow.
+    protected virtual IEnumerator FreezeTimerCoroutine(float _seconds)
     {
         FreezeTime(true);
 

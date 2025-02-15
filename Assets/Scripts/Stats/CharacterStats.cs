@@ -1,7 +1,23 @@
-//using System;
-//using System.Collections;
-//using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
+
+public enum StatType
+{
+    strength,
+    agility,
+    intelligence,
+    vitality,
+    damage,
+    critChance,
+    critPower,
+    health,
+    armor,
+    evasion,
+    magicRes,
+    fireDamage,
+    iceDamage,
+    lightingDamage
+}
 
 public class CharacterStats : MonoBehaviour
 {
@@ -76,12 +92,25 @@ public class CharacterStats : MonoBehaviour
 
         if (isShocked && shockedTimer < 0)
             isShocked = false;
-        
+
         if (isIgnited)
             ApplyIgniteDamage();
     }
 
-    
+    public virtual void IncreaseStatBy(int _modifier, float _duration, Stat _statToModify)
+    {
+        StartCoroutine(StatModCoroutine(_modifier, _duration, _statToModify));
+    }
+
+    private IEnumerator StatModCoroutine(int _modifier, float _duration, Stat _statToModify)
+    {
+        _statToModify.AddModifier(_modifier);
+
+        yield return new WaitForSeconds(_duration);
+
+        _statToModify.RemoveModifier(_modifier);
+
+    }
 
     public virtual void DoDamage(CharacterStats _targetStats)
     {
@@ -161,7 +190,7 @@ public class CharacterStats : MonoBehaviour
         _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
     }
 
-    
+
 
     public void ApplyAilments(bool _ignite, bool _chill, bool _shock)
     {
@@ -214,7 +243,7 @@ public class CharacterStats : MonoBehaviour
         isShocked = _shock;
 
         fx.ShockFxFor(ailmentsDuration);
-        Debug.Log("Applied Shock!");
+        //Debug.Log("Applied Shock!");
     }
 
     private void HitNearestTargetWithThunderStrike()
@@ -278,7 +307,7 @@ public class CharacterStats : MonoBehaviour
         fx.StartCoroutine("FlashFX");
 
 
-        Debug.Log("Take Physical Damage " + _damage);
+        //Debug.Log("Take Physical Damage " + _damage);
 
         if (currentHealth <= 0 && !isDead)
             Die();
@@ -288,7 +317,7 @@ public class CharacterStats : MonoBehaviour
     {
         DecreaseHealthBy(_damage);
 
-        Debug.Log("Take Magical Damage " + _damage);
+        //Debug.Log("Take Magical Damage " + _damage);
 
         if (currentHealth <= 0 && !isDead)
             Die();
@@ -302,10 +331,7 @@ public class CharacterStats : MonoBehaviour
     public virtual void DecreaseHealthBy(int _damage)
     {
         currentHealth -= _damage;
-        if(onHealthChanged != null)
-        {
-            onHealthChanged();
-        }
+        onHealthChanged?.Invoke();
     }
 
     #region Stat calculations
@@ -350,7 +376,7 @@ public class CharacterStats : MonoBehaviour
     {
         int totalCriticalChance = critChance.GetValue() + agility.GetValue();
 
-        if(Random.Range(0, 100) <= totalCriticalChance)
+        if (Random.Range(0, 100) <= totalCriticalChance)
         {
             return true;
         }
@@ -370,6 +396,29 @@ public class CharacterStats : MonoBehaviour
     {
         return maxHealth.GetValue() + vitality.GetValue() * 5;
     }
-    
-    #endregion 
+
+    #endregion
+
+
+    public Stat GetStat(StatType _buffType)
+    {
+        switch (_buffType)
+        {
+            case StatType.strength: return strength;
+            case StatType.agility: return agility;
+            case StatType.intelligence: return intelligence;
+            case StatType.vitality: return vitality;
+            case StatType.damage: return damage;
+            case StatType.critChance: return critChance;
+            case StatType.critPower: return critPower;
+            case StatType.health: return maxHealth;
+            case StatType.armor: return armor;
+            case StatType.evasion: return evasion;
+            case StatType.magicRes: return magicResistance;
+            case StatType.fireDamage: return fireDamage;
+            case StatType.iceDamage: return iceDamage;
+            case StatType.lightingDamage: return lightningDamage;
+            default: return null;
+        }
+    }
 }

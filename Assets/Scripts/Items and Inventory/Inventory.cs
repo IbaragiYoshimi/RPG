@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -22,11 +23,17 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Transform inventorySlotParent;
     [SerializeField] private Transform stashSlotParent;
     [SerializeField] private Transform equipmentSlotParent;
+    [SerializeField] private Transform statSlotParent;
 
 
     private UI_ItemSlot[] inventoryItemSlot;
     private UI_ItemSlot[] stashItemSlot;
     private UI_EquipmentSlot[] equipmentSlot;
+    private UI_StatSlot[] statSlot;
+
+    [Header("Items cooldown")]
+    private float lastTimeUsedFlaskEffect;
+    private float lastTimeUsedArmorEffect;
 
     private void Awake()
     {
@@ -51,6 +58,7 @@ public class Inventory : MonoBehaviour
         inventoryItemSlot = inventorySlotParent.GetComponentsInChildren<UI_ItemSlot>();
         stashItemSlot = stashSlotParent.GetComponentsInChildren<UI_ItemSlot>();
         equipmentSlot = equipmentSlotParent.GetComponentsInChildren<UI_EquipmentSlot>();
+        statSlot = statSlotParent.GetComponentsInChildren<UI_StatSlot>();
 
         AddStartingItems();
     }
@@ -130,6 +138,11 @@ public class Inventory : MonoBehaviour
         for(int i = 0; i < stash.Count; i++)
         {
             stashItemSlot[i].UpdateSlot(stash[i]);
+        }
+
+        for (int i = 0; i < statSlot.Length; i++)
+        {
+            statSlot[i].UpdateStatValueUI();
         }
     }
 
@@ -258,7 +271,10 @@ public class Inventory : MonoBehaviour
         ItemData_Equipment currentFlask = GetEquipment(EquipmentType.Flask);
 
         if (currentFlask != null)
-            Debug.Log("Used flask and healed!");
+        {
+            currentFlask.Effect();
+        }
     }
 
+    
 }

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f19ac7d380a5dc94d994963d7326a9af, type: 3}
-  m_Name: Wamdus Santa
+  m_Name: Subekuri Gauntlet
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Wamdus Santa
-  icon: {fileID: 21300000, guid: 932e6f5f1c72c55448aa0fde3f5bbd82, type: 3}
+  itemName: Subekuri Gauntlet
+  icon: {fileID: 21300000, guid: 256768ccff680b34f9a7f487088db7a8, type: 3}
   dropChance: 0
-  equipmentType: 2
+  equipmentType: 1
   itemEffects:
-  - {fileID: 11400000, guid: 2bd3619dd41c37643a2a6966473c18d2, type: 2}
+  - {fileID: 11400000, guid: b0fffb5eda185d845af9536f487a8b0c, type: 2}
   strength: 0
   agility: 0
   intelligence: 0

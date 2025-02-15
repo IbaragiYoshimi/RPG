@@ -49,9 +49,16 @@ public class ItemData_Equipment : ItemData
         }
     }
 
+    public void Effect()
+    {
+        foreach (var item in itemEffects)
+        {
+            item.ExecuteEffect();
+        }
+    }
+
     public void AddModifiers()
     {
-        // 通过PlayerManager 单例寻找 Player 实例，再找挂载在 Player 上的 PlayerStats。
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
         playerStats.strength.AddModifier(strength);
@@ -75,7 +82,6 @@ public class ItemData_Equipment : ItemData
 
     public void RemoveModifiers()
     {
-        // 通过PlayerManager 单例寻找 Player 实例，再找挂载在 Player 上的 PlayerStats。
         PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
         playerStats.strength.RemoveModifier(strength);

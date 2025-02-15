@@ -15,6 +15,9 @@ public class UI_EquipmentSlot : UI_ItemSlot
     // 点击装备格子时，将装备卸下，返回库存中。
     public override void OnPointerDown(PointerEventData eventData)
     {
+        if (item == null || item.data == null)
+            return;
+
         Inventory.instance.UnequipItem(item.data as ItemData_Equipment);
         Inventory.instance.AddItem(item.data as ItemData_Equipment);
         CleanUpSlot();

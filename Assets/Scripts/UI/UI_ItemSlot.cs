@@ -1,8 +1,7 @@
 using TMPro;
-using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
 {
@@ -43,6 +42,9 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        if (item == null)
+            return;
+
         if (Input.GetKey(KeyCode.LeftControl))
         {
             Inventory.instance.RemoveItem(item.data);

@@ -11,6 +11,9 @@ public class UI_CraftSlot : UI_ItemSlot
     }
     public override void OnPointerDown(PointerEventData eventData)
     {
+        if (item == null || item.data == null)
+            return;
+
         ItemData_Equipment craftData = item.data as ItemData_Equipment;
 
         Inventory.instance.CanCraft(craftData, craftData.craftingMaterials);
