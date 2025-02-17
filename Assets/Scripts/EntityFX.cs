@@ -7,9 +7,9 @@ public class EntityFX : MonoBehaviour
     private SpriteRenderer sr;
 
     [Header("Flash FX")]
-    [SerializeField] private float flashDuration;       // 受击闪烁动画持续时间。
-    [SerializeField] private Material hitMat;           // 角色受击后替换的材质
-    private Material originalMat;      // 角色原始材质
+    [SerializeField] private float flashDuration;       // Time for flash when entity be attacked.
+    [SerializeField] private Material hitMat;           // for instead orgin when entity be attacked.
+    private Material originalMat;      // Character's orginal.
 
 
     [Header("Ailment colors")]
@@ -37,7 +37,7 @@ public class EntityFX : MonoBehaviour
         Color currentColor = sr.color;
         sr.color = Color.white;
 
-        // 使用协程？做到类似于 Sleep 的效果。
+        // Use coroutine to implement sleep.
         yield return new WaitForSeconds(flashDuration);
 
         sr.color = currentColor;

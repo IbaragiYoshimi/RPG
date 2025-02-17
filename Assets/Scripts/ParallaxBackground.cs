@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /*
- * 感觉这里的无限背景实现并不好，但暂时先这样。以后再改。
+ * Endless background
  * 
  * 
  */
@@ -23,10 +23,10 @@ public class ParallaxBackground : MonoBehaviour
     {
         cam = GameObject.Find("Main Camera");
 
-        // 获取背景图片的 x 轴长度。
+        // Get background picture's X axis's length.
         length = GetComponent<SpriteRenderer>().bounds.size.x;
 
-        // 因为脚本挂载在 BG_Sky_Layer 和 BG_City_Layer 上，获取的是它们的位置的 x 轴。
+        // Because the script attempts on BG_Sky_Layer and BG_City_Layer, get their position's X axis.
         xPosition = transform.position.x;
     }
 
@@ -34,15 +34,15 @@ public class ParallaxBackground : MonoBehaviour
     void Update()
     {
         #region Parallax background
-        // 根据主摄像机 x 轴的移动距离，乘以视差效果距离，得到背景图应该移动的距离。
-        float distanceToMove = cam.transform.position.x * parallaxEffect;//
+        
+        float distanceToMove = cam.transform.position.x * parallaxEffect;
 
-        // 相当于让背景图跟随主摄像机移动，但不同背景层的位移距离不同。越远的位移距离越小。
+        
         transform.position = new Vector3(xPosition + distanceToMove, transform.position.y);
         #endregion
 
         #region Endless background
-        // 计算背景图将被移动的距离。
+        // Calculate the distance for moving of background picture.
         float distanceMoved = cam.transform.position.x * (1 - parallaxEffect);
 
         if (distanceMoved > xPosition + length)
