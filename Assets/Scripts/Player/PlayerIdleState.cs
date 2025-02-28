@@ -12,8 +12,8 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.Enter();
 
-        //player.ZeroVelocity();      //不知为何不能用这个函数，会报实例未绑定的问题，但 PlayerState 基类中，player 是比 rb 更早初始化的呀。调用 rb 可以，player 不行？
-        rb.velocity = new Vector2(0, 0);    // 为了解决滑墙时跳跃，落地后会继续向前滑行的 bug。
+        //player.ZeroVelocity();      // Unity throw a expection (Object not set to an instance) with unkown problem.
+        rb.velocity = new Vector2(0, 0);    // Slide on the wall then fall to the ground, can not continue sliding.
         
     }
 
@@ -27,11 +27,10 @@ public class PlayerIdleState : PlayerGroundedState
         base.Update();
 
 
-        // 这里不知有什么用，教程还未讲到，先写上吧。
         if (xInput == player.facingDir && player.IsWallDetected())
             return;
 
-        if(xInput != 0)     // 如果 x 轴的输入不为 0，则转换到 moveState。
+        if(xInput != 0)
             stateMachine.ChangeState(player.moveState);
     }
 }

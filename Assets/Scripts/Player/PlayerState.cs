@@ -39,10 +39,10 @@ public class PlayerState
 
         stateTimer -= Time.deltaTime;
 
-        xInput = Input.GetAxisRaw("Horizontal");            // 获取 x 轴速度的方向。
+        xInput = Input.GetAxisRaw("Horizontal");
         yInput = Input.GetAxisRaw("Vertical");
 
-        player.anim.SetFloat("yVelocity", rb.velocity.y);   // Blend tree 需要从 rb 上获取 y 轴速度，才能播放对应的动画。
+        player.anim.SetFloat("yVelocity", rb.velocity.y);   // Blend tree gains y axis's velocity from rigidbody. Then play corresponding animation.
     }
 
     public virtual void Exit()

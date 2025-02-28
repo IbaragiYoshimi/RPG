@@ -25,9 +25,6 @@ public class PlayerMoveState : PlayerGroundedState
         player.SetVelocity(xInput * player.moveSpeed, player.rb.velocity.y);
 
         if(xInput == 0 || player.IsWallDetected())
-            /*由于继承自 PlayerState，可以直接访问 stateMachine，
-             * 但 idleState 和 moveState 本身并无联系，需通过 player 才能访问。
-             */
             stateMachine.ChangeState(player.idleState);
     }
 }

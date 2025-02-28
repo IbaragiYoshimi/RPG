@@ -8,7 +8,7 @@ public class PlayerStateMachine
 
     public void Initialize(PlayerState _startState)
     {
-        currentState = _startState;     // 通过 _startState 构造 currentState
+        currentState = _startState;
         currentState.Enter();
     }
 

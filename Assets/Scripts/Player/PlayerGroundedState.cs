@@ -25,7 +25,7 @@ public class PlayerGroundedState : PlayerState
         if(Input.GetKeyDown(KeyCode.R))
             stateMachine.ChangeState(player.blackholeState);
 
-        // 注意：举剑瞄准的时候并没有创建剑的实体，仅播放动画，只有松开右键后，才创建剑的实体。所以可以将 HasNoSword 放在 Update 里检测。
+        // During aiming, there is no sword entity is created.So that we can put the HasNoSword function in Update function.
         if (Input.GetKeyDown(KeyCode.Mouse1) && HasNoSword())
             stateMachine.ChangeState(player.aimSword);
 
@@ -35,7 +35,6 @@ public class PlayerGroundedState : PlayerState
         if(Input.GetKeyDown(KeyCode.Mouse0))
             stateMachine.ChangeState(player.primaryAttack);
 
-        // 当玩家在空中无操作时，不要进入 idleState，而是应该进入 airState，播放 Fall 动画。
         if (!player.IsGroundDetected())
             stateMachine.ChangeState(player.airState);
 

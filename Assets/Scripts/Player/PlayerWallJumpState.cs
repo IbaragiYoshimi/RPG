@@ -13,7 +13,7 @@ public class PlayerWallJumpState : PlayerState
         base.Enter();
 
         stateTimer = .4f;
-        player.SetVelocity(5 * -player.facingDir, player.jumpForce);        // 滑墙时往 facingDir 的反方向跳跃
+        player.SetVelocity(5 * -player.facingDir, player.jumpForce);        // Jump in the opposite direction during slide on the wall.
     }
 
     public override void Exit()

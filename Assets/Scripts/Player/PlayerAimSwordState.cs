@@ -24,7 +24,7 @@ public class PlayerAimSwordState : PlayerState
     {
         base.Update();
 
-        // 瞄准时不可移动。
+        
         player.SetZeroVelocity();
 
         if(Input.GetKeyUp(KeyCode.Mouse1))

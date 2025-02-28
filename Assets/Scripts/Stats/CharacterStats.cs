@@ -32,7 +32,7 @@ public class CharacterStats : MonoBehaviour
     [Header("Offensive stats")]
     public Stat damage;
     public Stat critChance;
-    public Stat critPower;     // default value 150%，暴伤是原本的150%
+    public Stat critPower;     // default value 150%
 
     [Header("Defensive stats")]
     public Stat maxHealth;

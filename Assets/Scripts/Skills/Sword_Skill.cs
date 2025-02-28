@@ -29,7 +29,7 @@ public class Sword_Skill : Skill
 
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
-    [SerializeField] private Vector2 launchForce;       // 丢剑的初始 x、y 轴速度
+    [SerializeField] private Vector2 launchForce;       // Throw sword's default speed.
     [SerializeField] private float swordGravity;
     [SerializeField] private float freezeTimeDuration;
     [SerializeField] private float returnSpeed;
@@ -38,18 +38,18 @@ public class Sword_Skill : Skill
     private Vector2 finalDir;
 
     [Header("Aim dots")]
-    [SerializeField] private int numberOfDots;          // 瞄准点的数量
-    [SerializeField] private float spaceBetweenDots;    // 点的间距
-    [SerializeField] private GameObject dotPrefab;      // 点的预制件
-    [SerializeField] private Transform dotsParent;      // 点的位置
+    [SerializeField] private int numberOfDots;          // Number of dots.
+    [SerializeField] private float spaceBetweenDots;    // Distance of dots.
+    [SerializeField] private GameObject dotPrefab;      // Prefab of dots.
+    [SerializeField] private Transform dotsParent;      // Position of dots when not in aiming state.
 
-    private GameObject[] dots;                          // 点的数组
+    private GameObject[] dots;                          // Array of dots.
 
     protected override void Start()
     {
         base.Start();
 
-        // 一进入游戏，就生成 20 个抛物线点，挂载在 player 的 dotParent 下。
+        // Whenever player the game, generate 20 dots. And storage them in the dotsParent.
         GenerateDots();
 
         SetupGravity();
@@ -67,13 +67,12 @@ public class Sword_Skill : Skill
 
     protected override void Update()
     {
-        // 当松开鼠标右键时，得到最终的方向，用于生成剑。
+        // Get the direction when the moment of you release the right mouse button.
         if (Input.GetKeyUp(KeyCode.Mouse1))
-            /* normalized 归一化，可以理解为取向量的模，取单位向量。 */
+            // Take the unit vector.
             finalDir = new Vector2(AimDirection().normalized.x * launchForce.x, AimDirection().normalized.y * launchForce.y);
 
-
-        // 当按下鼠标右键时，将抛物线点的索引值，作为时间 t，然后再乘点间距 spaceBetweenDots，作为真正的时间间隔 t，代入 DotsPosition()。
+        // When you press right mouse button, the index of dots as time value t, multiply dots' distance. Then as the real time value passing parameters to DotsPosition().
         if (Input.GetKey(KeyCode.Mouse1))
         {
             for (int i = 0; i < dots.Length; i++)
@@ -95,12 +94,12 @@ public class Sword_Skill : Skill
         else if (swordType == SwordType.Spin)
             newSwordScript.SetupSpin(true, maxTravelDistance, spinDuration, hitCooldown);
 
-        // 将最终施加给剑的力（向量）、重力，赋值给 剑的 rb，其会自动计算每一帧剑应该飞到什么位置。但抛物线点不同，需要我们手动计算。
+        // Differ from rigidbody can calculate sword's position each frame automatically, we should calculate dots' position using Newton's Law manually.
         newSwordScript.SetupSword(finalDir, swordGravity, player, freezeTimeDuration, returnSpeed);
 
         player.AssignNewSword(newSword);
 
-        // 剑生成后，关闭所有抛物线点。
+        // Unactive all the dots when sword generates.
         DotsActive(false);
     }
 

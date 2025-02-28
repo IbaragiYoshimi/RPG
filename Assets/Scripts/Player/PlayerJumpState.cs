@@ -24,7 +24,6 @@ public class PlayerJumpState : PlayerState
     {
         base.Update();
 
-        // 如果 rb 的 y 轴速度小于 0，状态转换为 airState，表示正在下落阶段。
         if (rb.velocity.y < 0)
             stateMachine.ChangeState(player.airState);
     }

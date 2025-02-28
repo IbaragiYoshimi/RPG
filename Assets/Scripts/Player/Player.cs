@@ -50,19 +50,15 @@ public class Player : Entity
     protected override void Awake()
     {
         base.Awake();
-        stateMachine = new PlayerStateMachine();        // 注意顺序，先实例化 stateMachine。
+        stateMachine = new PlayerStateMachine();        // Instantiate stateMachine firstly.
 
-        /*实例化 idleState 时，调用其构造函数，将 this 指针传入，它通过 this 指针在自己的脚本内构造出 player，
-         * 并通过它自己的 player 来控制这个脚本中的 anim。
-         * 因为 idleState 本身并未附着在任何场景对象中，所以需要与 Player 脚本关联，通过本脚本中的对象来 setBool。
-         * */
         idleState = new PlayerIdleState(this, stateMachine, "Idle");
         moveState = new PlayerMoveState(this, stateMachine, "Move");
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
-        airState = new PlayerAirState(this, stateMachine, "Jump");      // 注意，airState 一样是 jump 状态，关联 Unity Animator 中的参数 Jump，所以给的参数也是 Jump。
+        airState = new PlayerAirState(this, stateMachine, "Jump");      //  In Animator, airState use the jump bool and player jump/fall animations.
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "WallSlide");
-        wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");    // 在墙上跳也是使用跳跃动画。
+        wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
 
         primaryAttack = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
         counterAttack = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");

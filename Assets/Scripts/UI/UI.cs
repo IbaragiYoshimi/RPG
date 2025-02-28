@@ -5,9 +5,11 @@ using UnityEngine.UIElements;
 
 public class UI : MonoBehaviour
 {
-    //[SerializeField] private GameObject characterUI;
+    [SerializeField] private GameObject characterUI;
 
     public UI_ItemTooltip itemTooltip;
+    public UI_StatTooltip statTooltip;
+
     void Start()
     {
         

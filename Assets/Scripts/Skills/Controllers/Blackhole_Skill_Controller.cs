@@ -172,7 +172,7 @@ public class Blackhole_Skill_Controller : MonoBehaviour
         GameObject newHotKey = Instantiate(hotKeyPrefab, collision.transform.position + new Vector3(0, 2), Quaternion.identity);
         createdHotKey.Add(newHotKey);
 
-        // 自动随机分配热键
+        // Assign hot keys randomly.
         KeyCode choosenKey = keyCodeList[Random.Range(0, keyCodeList.Count)];
         keyCodeList.Remove(choosenKey);
 
