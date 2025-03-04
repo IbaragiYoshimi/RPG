@@ -868,6 +868,7 @@ MonoBehaviour:
   statType: 8
   statValueText: {fileID: 117426153}
   statNameText: {fileID: 103417853}
+  statDescription: Decreases physical damage you take.
 --- !u!114 &117426153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2797,6 +2798,7 @@ MonoBehaviour:
   statType: 6
   statValueText: {fileID: 355473049}
   statNameText: {fileID: 679962633}
+  statDescription: Increases power of your critical attack.
 --- !u!114 &355473049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3875,6 +3877,7 @@ MonoBehaviour:
   statType: 9
   statValueText: {fileID: 477759120}
   statNameText: {fileID: 122333960}
+  statDescription: Increases your chance to avoid attack.
 --- !u!114 &477759120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4384,13 +4387,14 @@ GameObject:
   - component: {fileID: 518552156}
   - component: {fileID: 518552161}
   - component: {fileID: 518552160}
+  - component: {fileID: 518552162}
   m_Layer: 5
   m_Name: Stat_Tooltip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &518552156
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4449,6 +4453,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 518552155}
   m_CullTransparentMesh: 1
+--- !u!114 &518552162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518552155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6b6016f70ea4e48ae4a153fa4cdc84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: {fileID: 1141102077}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -6920,7 +6937,7 @@ GameObject:
   - component: {fileID: 742605401}
   - component: {fileID: 742605400}
   m_Layer: 5
-  m_Name: Stat - Lighting damage
+  m_Name: Stat - Lightning damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6958,10 +6975,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976575ba3c5fd5646a658d5851b03a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statName: Lighting damage
+  statName: Lightning damage
   statType: 13
   statValueText: {fileID: 742605401}
   statNameText: {fileID: 1623289519}
+  statDescription: Amount of lightning damage you do.
 --- !u!114 &742605401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7713,6 +7731,7 @@ MonoBehaviour:
   statType: 7
   statValueText: {fileID: 847372643}
   statNameText: {fileID: 1253691176}
+  statDescription: Amount of maximum health you have.
 --- !u!114 &847372643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8587,7 +8606,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e7791ad00304f84fa05a8313f9030cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterUI: {fileID: 1374748525}
   itemTooltip: {fileID: 38509016}
+  statTooltip: {fileID: 518552162}
 --- !u!1 &964022007
 GameObject:
   m_ObjectHideFlags: 0
@@ -9430,6 +9451,7 @@ MonoBehaviour:
   statType: 2
   statValueText: {fileID: 1130898486}
   statNameText: {fileID: 832145781}
+  statDescription: increases magical damage and resistance.
 --- !u!114 &1130898486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9716,6 +9738,7 @@ MonoBehaviour:
   statType: 11
   statValueText: {fileID: 1162005916}
   statNameText: {fileID: 1293255109}
+  statDescription: Amount of fire damage you do.
 --- !u!114 &1162005916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10002,6 +10025,7 @@ MonoBehaviour:
   statType: 12
   statValueText: {fileID: 1208486629}
   statNameText: {fileID: 2129639069}
+  statDescription: Amount of ice damage you do.
 --- !u!114 &1208486629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11259,6 +11283,7 @@ MonoBehaviour:
   statType: 5
   statValueText: {fileID: 1322102258}
   statNameText: {fileID: 1532794038}
+  statDescription: Chance to do critical damage.
 --- !u!114 &1322102258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14868,6 +14893,7 @@ MonoBehaviour:
   statType: 4
   statValueText: {fileID: 1501917406}
   statNameText: {fileID: 2055473331}
+  statDescription: Amount of physics damage you do.
 --- !u!114 &1501917406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17942,7 +17968,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lighting damage
+  m_text: Lightning damage
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 84bdc42b70bb5e54aa18bb33c1fa834e, type: 2}
   m_sharedMaterial: {fileID: -8065883861848785263, guid: 84bdc42b70bb5e54aa18bb33c1fa834e, type: 2}
@@ -19806,6 +19832,7 @@ MonoBehaviour:
   statType: 3
   statValueText: {fileID: 1795343653}
   statNameText: {fileID: 947906995}
+  statDescription: Increases health.
 --- !u!114 &1795343653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20982,6 +21009,7 @@ MonoBehaviour:
   statType: 0
   statValueText: {fileID: 1911731096}
   statNameText: {fileID: 1193126945}
+  statDescription: Increases damage and critical power.
 --- !u!1 &1933412138
 GameObject:
   m_ObjectHideFlags: 0
@@ -21795,6 +21823,7 @@ MonoBehaviour:
   statType: 1
   statValueText: {fileID: 2043384301}
   statNameText: {fileID: 77426576}
+  statDescription: Increases evasion and critical chance.
 --- !u!114 &2043384301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22615,6 +22644,7 @@ MonoBehaviour:
   statType: 10
   statValueText: {fileID: 2115806951}
   statNameText: {fileID: 515105001}
+  statDescription: ' '
 --- !u!114 &2115806951
 MonoBehaviour:
   m_ObjectHideFlags: 0
