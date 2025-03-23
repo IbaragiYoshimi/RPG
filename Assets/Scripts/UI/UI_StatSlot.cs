@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UI_StatSlot : MonoBehaviour
+public class UI_StatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private UI ui;
     [SerializeField] private string statName;
 
     [SerializeField] private StatType statType;
@@ -26,6 +28,7 @@ public class UI_StatSlot : MonoBehaviour
     void Start()
     {
         UpdateStatValueUI();
+        ui = GetComponentInParent<UI>();
     }
 
     // Update is called once per frame
@@ -57,5 +60,15 @@ public class UI_StatSlot : MonoBehaviour
                 statValueText.text = (playerStats.magicResistance.GetValue() + (playerStats.intelligence.GetValue() * 3)).ToString();
         }
 
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ui.statTooltip.ShowStatTooltip(statDescription);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ui.statTooltip.HideStatTooltip(); 
     }
 }

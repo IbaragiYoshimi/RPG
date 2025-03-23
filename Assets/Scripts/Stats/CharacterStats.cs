@@ -16,7 +16,7 @@ public enum StatType
     magicRes,
     fireDamage,
     iceDamage,
-    lightingDamage
+    lightningDamage
 }
 
 public class CharacterStats : MonoBehaviour
@@ -417,7 +417,7 @@ public class CharacterStats : MonoBehaviour
             case StatType.magicRes: return magicResistance;
             case StatType.fireDamage: return fireDamage;
             case StatType.iceDamage: return iceDamage;
-            case StatType.lightingDamage: return lightningDamage;
+            case StatType.lightningDamage: return lightningDamage;
             default: return null;
         }
     }
