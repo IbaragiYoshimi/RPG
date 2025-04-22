@@ -61,13 +61,13 @@ public class Sword_Skill_Controller : MonoBehaviour
         freezeTimeDuration = _freezeTimeDuration;
         returnSpeed = _returnSpeed;
 
-        rb.velocity = _dir;
+        rb.linearVelocity = _dir;
         rb.gravityScale = _gravityScale;
 
         if (pierceAmount <= 0)
             anim.SetBool("Rotation", true);
 
-        spinDirection = Mathf.Clamp(rb.velocity.x, -1, 1);
+        spinDirection = Mathf.Clamp(rb.linearVelocity.x, -1, 1);
 
         Invoke("DestroyMe", 7);
     }
@@ -108,7 +108,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     {
         // Make the sword parallel to the red arrow in the world coorinates of the rigid body.
         if (canRotate)
-            transform.right = rb.velocity;
+            transform.right = rb.linearVelocity;
 
         if (isReturning)
         {
@@ -256,7 +256,8 @@ public class Sword_Skill_Controller : MonoBehaviour
         canRotate = false;
         cd.enabled = false;
 
-        rb.isKinematic = true;
+        //rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
         if (isBouncing && enemyTarget.Count > 0)

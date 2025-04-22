@@ -51,7 +51,7 @@ public class PlayerPrimaryAttackState : PlayerState
         base.Update();
 
         if (stateTimer < 0)
-            rb.velocity = new Vector2(0, 0);
+            rb.linearVelocity = new Vector2(0, 0);
 
         if (triggerCalled)
             stateMachine.ChangeState(player.idleState);

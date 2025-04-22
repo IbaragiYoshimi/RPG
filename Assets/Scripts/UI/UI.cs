@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class UI : MonoBehaviour
 {
@@ -12,6 +9,8 @@ public class UI : MonoBehaviour
     
     public UI_ItemTooltip itemTooltip;
     public UI_StatTooltip statTooltip;
+    public UI_CraftWindow craftWindow;
+    public UI_SkillTooltip SkillTooltip;
 
     void Start()
     {
@@ -51,12 +50,14 @@ public class UI : MonoBehaviour
 
     public void SwitchWithKeyTo(GameObject _menu)
     {
+        // If the UI was opened, turn it off.
         if (_menu != null && _menu.activeSelf)
         {
             _menu.SetActive(false);
             return;
         }
-
+        
+        // Otherwise, turn it on.
         SwitchTo(_menu);
     }
 }

@@ -13,7 +13,7 @@ public class PlayerIdleState : PlayerGroundedState
         base.Enter();
 
         //player.ZeroVelocity();      // Unity throw a expection (Object not set to an instance) with unkown problem.
-        rb.velocity = new Vector2(0, 0);    // Slide on the wall then fall to the ground, can not continue sliding.
+        rb.linearVelocity = new Vector2(0, 0);    // Slide on the wall then fall to the ground, can not continue sliding.
         
     }
 

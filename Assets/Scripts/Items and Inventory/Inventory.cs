@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
+    public event Action OnMaterialsChanged;
 
     public List<ItemData> startingItems;
 
@@ -156,7 +158,8 @@ public class Inventory : MonoBehaviour
         {
             AddToStash(_item);
         }
-
+        
+        OnMaterialsChanged?.Invoke();
         UpdateSlotUI();
     }
 
@@ -212,7 +215,8 @@ public class Inventory : MonoBehaviour
             else
                 stashValue.RemoveStack();
         }
-
+        
+        OnMaterialsChanged?.Invoke();
         UpdateSlotUI();
     }
 
@@ -256,7 +260,7 @@ public class Inventory : MonoBehaviour
             RemoveItem(materialsToRemove[i].data);
         }
         AddItem(_itemToCraft);
-        Debug.Log("Here is your item " + _itemToCraft.name);
+        Debug.Log("Here is your " + _itemToCraft.name);
 
         return true;
     }
@@ -287,4 +291,5 @@ public class Inventory : MonoBehaviour
     }
 
     
+
 }

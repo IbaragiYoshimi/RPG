@@ -42,7 +42,7 @@ public class PlayerState
         xInput = Input.GetAxisRaw("Horizontal");
         yInput = Input.GetAxisRaw("Vertical");
 
-        player.anim.SetFloat("yVelocity", rb.velocity.y);   // Blend tree gains y axis's velocity from rigidbody. Then play corresponding animation.
+        player.anim.SetFloat("yVelocity", rb.linearVelocity.y);   // Blend tree gains y axis's velocity from rigidbody. Then play corresponding animation.
     }
 
     public virtual void Exit()

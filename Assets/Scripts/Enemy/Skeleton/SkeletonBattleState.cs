@@ -35,8 +35,8 @@ public class SkeletonBattleState : EnemyState
         }
         else
         {
-            /*Íæ¼ÒÀë¿ª enemy µÄÌ½²â·¶Î§Ò»¶ÎÊ±¼äºó£¬enemy Àë¿ªÕ½¶·×´Ì¬£¬»Øµ½ idleState£»
-             * »òÕßÍæ¼ÒÓë enemy µÄ¾àÀë´óµ½Ò»¶¨³Ì¶È£¬Ò²»áÁ¢¿Ì·µ»Ø idleState¡£
+            /*ï¿½ï¿½ï¿½ï¿½ë¿ª enemy ï¿½ï¿½Ì½ï¿½â·¶Î§Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½enemy ï¿½ë¿ªÕ½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Øµï¿½ idleStateï¿½ï¿½
+             * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ enemy ï¿½Ä¾ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ì¶È£ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½ï¿½ï¿½ idleStateï¿½ï¿½
              * 
              * 
              */
@@ -44,13 +44,13 @@ public class SkeletonBattleState : EnemyState
                 stateMachine.ChangeState(enemy.idleState);
         }
 
-        // ±ê¼ÇÍæ¼ÒÔÚ Enemy µÄ x ÖáÕý·½Ïò»¹ÊÇ¸º·½Ïò¡£
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enemy ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½ï¿½ï¿½
         if (player.position.x > enemy.transform.position.x)
             moveDir = 1;
         else if (player.position.x < enemy.transform.position.x)
             moveDir = -1;
 
-        enemy.SetVelocity(enemy.moveSpeed * moveDir, rb.velocity.y);
+        enemy.SetVelocity(enemy.moveSpeed * moveDir, rb.linearVelocity.y);
 
     }
     public override void Exit()
