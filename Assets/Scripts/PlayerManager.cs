@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;       // Singleton instead of GameObject.Find()
     public Player player;
-
+    public int currency;
     private void Awake()
     {
         if (instance != null)

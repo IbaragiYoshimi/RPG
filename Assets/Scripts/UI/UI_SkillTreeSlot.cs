@@ -16,6 +16,8 @@ public class UI_SkillTreeSlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] private UI ui;
     [SerializeField] private float xOffset;
     [SerializeField] private float yOffset;
+
+    public int skillCurrency;
     
     public bool unlocked = false;
 
@@ -47,7 +49,7 @@ public class UI_SkillTreeSlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
         {
             if (shouldBeUnlocked[i].unlocked == false)
             {
-                Debug.Log("Can't unlock skill slot.");
+                Debug.Log("Can't unlock skill slot, because prerequisites had not been met.");
                 return;
             }
         }
@@ -57,9 +59,14 @@ public class UI_SkillTreeSlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
         {
             if (shouldBeLocked[i].unlocked == true)
             {
-                Debug.Log("Can't unlock skill slot.");
+                Debug.Log("Can't unlock skill slot, because mutually exclusive conditions had been met.");
                 return;
             }
+        }
+
+        if (PlayerManager.instance.currency <= skillCurrency)
+        {
+            Debug.Log("Can't unlock skill! Not enough currency!");
         }
         
         unlocked = true;
